@@ -90,7 +90,8 @@ void commitSet(Commit* c, char* key, char* value){
         c->n++;
     }
     //SI la case du commit est déjà allouée
-    if(c->T[hash_valeur]!=NULL){
+    int i=0;
+    while(c->T[hash_valeur]!=NULL && i<c->size){
         
     }    
 }
