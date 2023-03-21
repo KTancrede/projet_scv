@@ -163,3 +163,18 @@ Commit* stc(char* ch){
     }
     return c;
 }
+
+//Ecrit dans un fichier file la chaine représentant le commit c
+void ctf(Commit* c, char* file){
+    FILE* f=fopen(file,"w");
+    if(f==NULL){
+        printf("fnc ctf: erreur d'ouverture du fichier");
+        return;
+    }
+    fputs(cts(c),f);
+    fclose(f);
+}
+//charger un Commit depuis un fichier le représentant
+Commit* ftc(char* file){
+
+}
