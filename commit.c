@@ -82,6 +82,10 @@ unsigned long hash(unsigned char *str){
 }
 //insère la paire (key, value) dans la table, en gérant les collisions par adressage ouvert et probing linéaire.
 void commitSet(Commit* c, char* key, char* value){ // A RETRAVAILLER
+    if(c==NULL){
+        printf("fnc commitSet: le commit est mal défini\n");
+        return;
+    }
     unsigned long hash_valeur=hash(key)%SIZE_MAX;
     //Si la case du commit est vide
     if(c->T[hash_valeur]==NULL){
@@ -109,6 +113,10 @@ Commit* createCommit(char* hash){
 }
 //cherche dans la table s’il existe un élément dont la clé est key retourne la valeur de l’élément s’il existe, et NULL sinon
 char* commitGet(Commit* c, char* key){
+    if(c==NULL){
+        printf("fnc commitGet: le commit est mal défini\n");
+        return NULL;
+    }
     unsigned long hash_valeur=hash(key)%SIZE_MAX;
     int i=0;
     while(c->T[hash_valeur]!=NULL && i<c->size){
@@ -119,4 +127,39 @@ char* commitGet(Commit* c, char* key){
         hash_valeur=(hash_valeur+i)%SIZE_MAX;
     }
     return NULL;
+}
+//convertit un commit en une chaı̂ne de caractères
+char* cts(Commit* c){
+    if(c==NULL){
+        printf("fnc cts: le commit est mal défini\n");
+        return NULL;
+    }
+    char*r=malloc(2+SIZE_MAX*sizeof(char));
+    r[0]='\0';
+    
+    for(int i=0;i<c->size;i++){
+        if(c->T[i]!=NULL){
+            strcat(r,kvts(c->T[i]));
+            strcat(r,"\n");
+        }
+    }
+    return r;
+}
+//Retourne un commit depuis une string
+Commit* stc(char* ch){
+    if(ch==NULL){
+        printf("fnc stc: erreur de d'argument de string\n");
+    }
+    Commit* c=initCommit();
+
+    char* tok=strtok(ch,"\n");
+    while(tok!=NULL){
+        kvp *k=stkv(tok);
+        if(k!=NULL){
+            commitSet(c,k->key,k->value);
+            freeKeyVal(k);
+        }
+        tok=strtok(NULL,"\n");
+    }
+    return c;
 }
