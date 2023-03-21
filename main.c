@@ -12,5 +12,5 @@ int main(){
     kvp *kk=stkv("ad: as");
     printf("%s\n",kvts(kk));
     freeKeyVal(kk);
-    
+    printf("test");
 }
