@@ -38,7 +38,10 @@
     "hash.h": "c",
     "string.h": "c",
     "stdlib.h": "c",
-    "lcc.h": "c"
+    "lcc.h": "c",
+    "wf.h": "c",
+    "commit.h": "c",
+    "git.h": "c"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "makefile.launchConfigurations": [
@@ -47,5 +50,6 @@
       "binaryPath": "/home/tanc/Bureau/S4/Structures_de_données/PROJET/projet_scv/main",
       "binaryArgs": []
     }
-  ]
+  ],
+  "cmake.configureOnOpen": false
 }

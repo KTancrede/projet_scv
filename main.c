@@ -9,7 +9,8 @@
 #include "commit.h"
 
 int main(){
-    kvp *kk=stkv("ad: as");
-    printf("%s\n",kvts(kk));
-    freeKeyVal(kk);
+    printf("%s",kvts(stkv("azz :fefe")));
+    /*Commit *c=ftc("t.txt");
+    char*str=cts(c);
+    printf("%s\n",str);*/
 }

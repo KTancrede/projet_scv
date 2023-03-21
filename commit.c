@@ -20,55 +20,38 @@ void freeKeyVal(kvp* kv){
     free(kv->value);
     free(kv);
 }
-//permet de convertir un élément en une chaı̂ne de caractères de la forme ”clé :valeur”
+//permet de convertir un élément kvp en une chaı̂ne de caractères de la forme ”clé :valeur”
 char* kvts(kvp* k){
-    char *r=(char*)malloc(1024*sizeof(char));
+    if(k==NULL){
+        printf("fnc kvts: le kvp est mal défini");
+        return NULL;
+    }
+    int longueur=strlen(k->key)+strlen(k->value)+3;
+    char *r=malloc(longueur*sizeof(char));
     r[0]='\0';
-    snprintf(r,1024,"%s :%s",k->key,k->value);
+    snprintf(r,longueur,"%s :%s",k->key,k->value);
+    r[longueur]='\0';
     return r;
 }
 //Créer un kvp depuis une string de la forme ”clé :valeur”
 kvp* stkv(char* str){
-    char* k = (char*)malloc(1024/2*sizeof(char)); 
+    char* k = (char*)malloc(strlen(str)*sizeof(char)); 
     k[0] = '\0'; 
-    char* v = (char*)malloc(1024/2*sizeof(char)); 
+    char* v = (char*)malloc(strlen(str)*sizeof(char)); 
     v[0] = '\0'; 
-    int i = 0;
-    // Extraction de la première partie de la chaîne avant ":"
-    while(str[i] != ':' && str[i] != '\0'){
-        if(str[i]==' '){ //gestion des espaces
-            i++;
-        }
-        k[i] = str[i]; 
-        //printf("%s\n",&k[i]);
-        i++;
-    }
-    k[i] = '\0'; 
-    // Extraction de la deuxième partie de la chaîne après ":"
-    if(str[i] == ':'){
-        i++;
-        int j = 0;
-        while(str[i] != '\0'){
-            if(str[i]==' '){ // gestion des espaces
-                i++;
-            }
-            v[j] = str[i]; 
-            i++; 
-            j++;
-        }
-        v[j] = '\0'; 
-    }
+    
     return createKeyVal(k, v); // Appel à la fonction createKeyVal avec les chaînes k et v en paramètres
 }
+
 //Initialise un commint
 Commit* initCommit(){
     Commit* c=(Commit *)malloc(sizeof(Commit));
+    c->n=0;
+    c->size=SIZE_MAX;
     c->T=malloc(c->size*sizeof(kvp*));
     for(int i=0;i<c->size;i++){
         c->T[i]=NULL;
     }
-    c->n=0;
-    c->size=SIZE_MAX;
     return c;
 }
 
@@ -81,12 +64,13 @@ unsigned long hash(unsigned char *str){
     return hash;
 }
 //insère la paire (key, value) dans la table, en gérant les collisions par adressage ouvert et probing linéaire.
-void commitSet(Commit* c, char* key, char* value){ // A RETRAVAILLER
+void commitSet(Commit* c,char* key, char* value){ // A RETRAVAILLER
     if(c==NULL){
         printf("fnc commitSet: le commit est mal défini\n");
         return;
     }
-    unsigned long hash_valeur=hash(key)%SIZE_MAX;
+    unsigned char *ukey=(unsigned char*)key;
+    unsigned long hash_valeur=hash(ukey)%SIZE_MAX;
     //Si la case du commit est vide
     if(c->T[hash_valeur]==NULL){
         kvp* k=createKeyVal(key,value);
@@ -117,7 +101,8 @@ char* commitGet(Commit* c, char* key){
         printf("fnc commitGet: le commit est mal défini\n");
         return NULL;
     }
-    unsigned long hash_valeur=hash(key)%SIZE_MAX;
+    unsigned char *ukey=(unsigned char*)key;
+    unsigned long hash_valeur=hash(ukey)%SIZE_MAX;
     int i=0;
     while(c->T[hash_valeur]!=NULL && i<c->size){
         if(strcmp(c->T[hash_valeur]->key,key)==0){
@@ -134,13 +119,19 @@ char* cts(Commit* c){
         printf("fnc cts: le commit est mal défini\n");
         return NULL;
     }
-    char*r=malloc(2+SIZE_MAX*sizeof(char));
-    r[0]='\0';
-    
+    int longeur=0;
     for(int i=0;i<c->size;i++){
         if(c->T[i]!=NULL){
-            strcat(r,kvts(c->T[i]));
-            strcat(r,"\n");
+            longeur+=strlen(kvts(c->T[i]))+1;
+        }
+    }
+
+    char*r=malloc(longeur+1*sizeof(char));
+    r[0]='\0';
+    for(int i=0;i<c->size;i++){
+        if(c->T[i]!=NULL){
+            printf("%s\n",kvts(c->T[i]));
+            snprintf(r,strlen(kvts(c->T[i]))+2,"%s\n",kvts(c->T[i]));
         }
     }
     return r;
@@ -177,5 +168,18 @@ void ctf(Commit* c, char* file){
 
 //charger un Commit depuis un fichier le représentant
 Commit* ftc(char* file){
-
+    FILE* f=fopen(file,"r");
+    if(f==NULL){
+        printf("fnc ftc: erreur de lecture du fichier");
+    }
+    Commit *c=initCommit();
+    char ligne[255];
+    while(fgets(ligne,255,f)){
+        if(strlen(ligne)>1){//Si la ligne n'est pas vide
+            kvp*k=stkv(ligne);
+            commitSet(c,k->key,k->value);
+            freeKeyVal(k);
+        }
+    }
+    return c;
 }
