@@ -91,7 +91,12 @@ void commitSet(Commit* c, char* key, char* value){
     }
     //SI la case du commit est déjà allouée
     int i=0;
-    while(c->T[hash_valeur]!=NULL && i<c->size){
-        
+    while(c->T[hash_valeur]!=NULL && i<c->size){ 
+        if(strcmp(c->T[hash_valeur]->key,key)==0){ //Si la clé existe déjà on la met à jour avec +i
+            c->T[hash_valeur]->value=value;
+            return; //On a finit
+        }
+        i++;
+        hash_valeur=(hash_valeur+i)%SIZE_MAX;
     }    
 }
