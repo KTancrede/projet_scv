@@ -45,7 +45,7 @@ void insertFirst(List *L, Cell* C){
 char* ctos(Cell* c){
 
     if(c==NULL){
-        printf("fnc ctos: La cellule donnée n'exite pas\n");
+        printf("fnc ctos: La cellule donnée n'existe pas\n");
         return NULL;
     }
     if(c->data == NULL) {
@@ -79,10 +79,10 @@ Cell* listGet(List* L, int i){
     int n=0;
     Cell* c = *L;
     while(c!=NULL){
-        c=c->next;
         if(i<n++){
             return c;
         }
+        c=c->next;
     }
     printf("fnc listGet: l'élément n'a pas été trouvé\n");
     return NULL;
