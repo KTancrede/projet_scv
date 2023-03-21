@@ -107,3 +107,16 @@ Commit* createCommit(char* hash){
     commitSet(c,"tree",hash);
     return c;
 }
+//cherche dans la table s’il existe un élément dont la clé est key retourne la valeur de l’élément s’il existe, et NULL sinon
+char* commitGet(Commit* c, char* key){
+    unsigned long hash_valeur=hash(key)%SIZE_MAX;
+    int i=0;
+    while(c->T[hash_valeur]!=NULL && i<c->size){
+        if(strcmp(c->T[hash_valeur]->key,key)==0){
+            return c->T[hash_valeur]->value; // on a trouvé
+        }
+        i++;
+        hash_valeur=(hash_valeur+i)%SIZE_MAX;
+    }
+    return NULL;
+}

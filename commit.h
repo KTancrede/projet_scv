@@ -18,3 +18,4 @@ Commit* initCommit();
 unsigned long hash(unsigned char *str);
 void commitSet(Commit* c, char* key, char* value);
 Commit* createCommit(char* hash);
+char* commitGet(Commit* c, char* key);
