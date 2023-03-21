@@ -174,6 +174,7 @@ void ctf(Commit* c, char* file){
     fputs(cts(c),f);
     fclose(f);
 }
+
 //charger un Commit depuis un fichier le représentant
 Commit* ftc(char* file){
 
