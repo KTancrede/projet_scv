@@ -4,3 +4,6 @@
 # Unignore all with extensions
 !*.*
 
+#ignore all .txt
+*.txt
+
