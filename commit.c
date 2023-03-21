@@ -60,19 +60,37 @@ kvp* stkv(char* str){
     }
     return createKeyVal(k, v); // Appel à la fonction createKeyVal avec les chaînes k et v en paramètres
 }
-
+//Initialise un commint
 Commit* initCommit(){
     Commit* c=(Commit *)malloc(sizeof(Commit));
-    c->T=NULL;
+    c->T=malloc(c->size*sizeof(kvp*));
+    for(int i=0;i<c->size;i++){
+        c->T[i]=NULL;
+    }
     c->n=0;
     c->size=SIZE_MAX;
     return c;
 }
 
+//Fonction de hash
 unsigned long hash(unsigned char *str){
     unsigned long hash = 5381;
     int c;
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
     return hash;
+}
+//insère la paire (key, value) dans la table, en gérant les collisions par adressage ouvert et probing linéaire.
+void commitSet(Commit* c, char* key, char* value){
+    unsigned long hash_valeur=hash(key)%SIZE_MAX;
+    //Si la case du commit est vide
+    if(c->T[hash_valeur]==NULL){
+        kvp* k=createKeyVal(key,value);
+        c->T[hash_valeur]=k;
+        c->n++;
+    }
+    //SI la case du commit est déjà allouée
+    if(c->T[hash_valeur]!=NULL){
+        
+    }    
 }

@@ -16,3 +16,4 @@ char* kvts(kvp* k);
 kvp* stkv(char* str);
 Commit* initCommit();
 unsigned long hash(unsigned char *str);
+void commitSet(Commit* c, char* key, char* value);
