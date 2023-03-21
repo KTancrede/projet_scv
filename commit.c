@@ -35,11 +35,12 @@ char* kvts(kvp* k){
 }
 //Créer un kvp depuis une string de la forme ”clé :valeur”
 kvp* stkv(char* str){
-    char* k = (char*)malloc(strlen(str)*sizeof(char)); 
-    k[0] = '\0'; 
-    char* v = (char*)malloc(strlen(str)*sizeof(char)); 
-    v[0] = '\0'; 
-    
+    char* cpy=(char*)malloc(strlen(str)*sizeof(char));
+    strcpy(cpy,str);
+    char* ptr=strtok(cpy," :");
+    char* k=strdup(ptr);
+    ptr=strtok(NULL," :");
+    char* v=strdup(ptr);
     return createKeyVal(k, v); // Appel à la fonction createKeyVal avec les chaînes k et v en paramètres
 }
 
