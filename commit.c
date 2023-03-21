@@ -81,7 +81,7 @@ unsigned long hash(unsigned char *str){
     return hash;
 }
 //insère la paire (key, value) dans la table, en gérant les collisions par adressage ouvert et probing linéaire.
-void commitSet(Commit* c, char* key, char* value){
+void commitSet(Commit* c, char* key, char* value){ // A RETRAVAILLER
     unsigned long hash_valeur=hash(key)%SIZE_MAX;
     //Si la case du commit est vide
     if(c->T[hash_valeur]==NULL){
@@ -99,4 +99,11 @@ void commitSet(Commit* c, char* key, char* value){
         i++;
         hash_valeur=(hash_valeur+i)%SIZE_MAX;
     }    
+}
+
+//alloue et initialise un Commit, puis ajoute l’élément obligatoire correspondant à la clé "tree"
+Commit* createCommit(char* hash){
+    Commit *c=initCommit();
+    commitSet(c,"tree",hash);
+    return c;
 }
