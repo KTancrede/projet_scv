@@ -110,11 +110,11 @@ Cell* searchList(List* L, char* str) {
 List * stol ( char * s ) {
     int pos = 0;
     int n_pos = 0;
-    int size = strlen ( s ) ;
+    //int size = strlen ( s ) ;
     int sep = '|';
     char * ptr ;
     char * result = malloc ( sizeof ( char ) *1000) ;
-    int end = 0;
+    //int end = 0;
     List * L = initList () ;
     while ( pos < strlen ( s ) ) {
         ptr = strchr ( s + pos , sep ) ;
@@ -124,7 +124,7 @@ List * stol ( char * s ) {
             n_pos = ptr - s + 1;
         }
         memcpy ( result , s + pos , n_pos - pos - 1) ;
-        result [ n_pos - pos - 1] = '\0 ' ;
+        result[n_pos-pos-1] ='\0';
         pos = n_pos ;
         insertFirst (L , buildCell ( result ) ) ;
     }

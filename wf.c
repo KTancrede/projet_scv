@@ -2,12 +2,12 @@
 #include "stdlib.h"
 #include "string.h"
 #include "wf.h"
-#include <sys/stat.h>
 #include "hash.h"
 #include "unistd.h"
 #include "lcc.h"
 #include "git.h"
 #include "errno.h"
+#include <sys/stat.h>
 
 
 //Permet de créer un WorkFile
@@ -22,7 +22,7 @@ WorkFile* createWorkFile(char* name){
 char* wfts(WorkFile* wf){
     //re : valeur de retour
     char * re=malloc(1024*sizeof(char));
-    sprintf ( re , "%s \ t%s \ t%d" ,wf->name , wf->hash ,wf->mode ) ; //On vérifie si le hash n'est pas nul, si c'est le cas on remplace par les guillemets
+    sprintf ( re,"%s\t%s\t%d",wf->name , wf->hash ,wf->mode ) ; //On vérifie si le hash n'est pas nul, si c'est le cas on remplace par les guillemets
     return re;
 }
 //Permet de convertir une chaine de caractère en un WorkFile
@@ -35,7 +35,7 @@ WorkFile* stwf(char* ch) {
     char* name = malloc(1024*sizeof(char));
     char* hash= malloc(1024*sizeof(char));
     int mode;
-    sscanf ( ch,"%s \ t%s \ t%d",name,hash,&mode) ;
+    sscanf ( ch,"%s\t%s\t%d",name,hash,&mode) ;
     WorkFile* wf =createWorkFile(name);
     //On copie nos données dans la structure de données
     wf->hash = hash;
@@ -86,6 +86,7 @@ int appendWorkTree(WorkTree* wt, char* name, char* hash, int mode){
         wt -> tab [ wt -> n ++]. hash = NULL ;
         return 0;
     }
+    return 0;
 }
 //convertit un WorkTree en une chaı̂ne de caractères composée des représentations des WorkFile séparées par un saut de ligne (caractère ’\n’).
 char* wtts(WorkTree* wt){
@@ -147,7 +148,7 @@ WorkTree* ftwt(char* file){
     while ( fgets ( buff , N , f ) != NULL ){
         strcat ( all_wf , buff ) ;
     }
-    return stwt ( all_wf ) ;
+    return str_to_wt(all_wf);
     }
 //Permet de recuperer l'entier des permissions pour un fichier
 int getChmod(const char *path){
@@ -179,13 +180,27 @@ int isDir(const char* path) {
     return S_ISDIR(path_stat.st_mode);
 }
 
+char * hashToFile ( char * hash ){
+    char * ch2 = strdup ( hash ) ;
+    ch2 [2] = '\0';
+    struct stat st;
+    if( stat(ch2 ,&st)==-1){
+        mkdir ( ch2 , 0700) ;
+    }
+return hashToPath ( hash );
+}
+
 //crée un fichier temporaire représentant le WorkTree pour pouvoir ensuite créer l’enregistrement instantané du WorkTree (+ l’extension ”.t”) retourne le hash du fichier temporaire
 char* blobWorkTree( WorkTree * wt ) {
     char fname [100] = "/tmp/myfileXXXXXX" ;
-    int fd = mkstemp ( fname ) ;
+    int fd=mkstemp(fname);
+    if (fd == -1) {
+        perror("mkstemp");
+        exit(EXIT_FAILURE);
+    }
     wttf ( wt , fname ) ;
     char * hash = sha256file( fname ) ;
-    char * ch = hashToFile( hash ) ;
+    char * ch = hashToFile(hash) ;
     strcat(ch,".t") ;
     cp(ch, fname) ;
     return hash ;
@@ -206,22 +221,22 @@ char * concat_paths ( char * path1 , char * path2 ){
 //WorkFile wt dont le chemin est donné en paramètre, crée un enregistrement instantané de tout son contenu (de manière récursive), puis de lui même.
 char* saveWorkTree(WorkTree* wt, char* path){
    for ( int i =0; i < wt -> n ; i ++) {
-        char * absPath = concat_paths ( path , wt -> tab [ i ]. name ) ;
+        char * absPath = concat_paths ( path , wt->tab[i].name ) ;
         if ( isFile ( absPath ) == 1) {
-            blobFile ( absPath ) ;
-            wt -> tab [ i ]. hash = sha256file ( absPath ) ;
-            wt -> tab [ i ]. mode = getChmod ( absPath ) ;
+            blobFile(absPath);
+            wt->tab[i].hash = sha256file( absPath ) ;
+            wt->tab[i].mode = getChmod( absPath ) ;
         } 
         else{
             WorkTree * wt2 = initWorkTree () ;
             List * L = listdir ( absPath ) ;
             for ( Cell * ptr = * L ; ptr != NULL ; ptr = ptr -> next ) {
-                if ( ptr -> data [0] == '.' )
+                if ( ptr -> data[0]== '.' )
                     continue ;
-                appendWorkTree ( wt2 , ptr -> data , 0 , NULL ) ;
+                appendWorkTree(wt2,ptr->data,NULL,0) ;
                 }
-                wt -> tab [ i ]. hash = saveWorkTree ( wt2 , absPath ) ;
-                wt -> tab [ i ]. mode = getChmod ( absPath ) ;
+                wt -> tab[i].hash = saveWorkTree ( wt2 , absPath ) ;
+                wt -> tab[i].mode = getChmod ( absPath ) ;
         }
     }
     return blobWorkTree ( wt ) ; 

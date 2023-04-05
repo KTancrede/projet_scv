@@ -9,8 +9,7 @@
 #include "commit.h"
 
 int main(){
-    printf("%s",kvts(stkv("azz :fefe")));
-    /*Commit *c=ftc("t.txt");
+    Commit *c=ftc("t.txt");
     char*str=cts(c);
-    printf("%s\n",str);*/
+    printf("%s\n",str);
 }

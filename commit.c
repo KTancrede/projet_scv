@@ -22,25 +22,14 @@ void freeKeyVal(kvp* kv){
 }
 //permet de convertir un élément kvp en une chaı̂ne de caractères de la forme ”clé :valeur”
 char* kvts(kvp* k){
-    if(k==NULL){
-        printf("fnc kvts: le kvp est mal défini");
-        return NULL;
-    }
-    int longueur=strlen(k->key)+strlen(k->value)+3;
-    char *r=malloc(longueur*sizeof(char));
-    r[0]='\0';
-    snprintf(r,longueur,"%s :%s",k->key,k->value);
-    r[longueur]='\0';
-    return r;
+    char * buff = malloc ( sizeof ( char ) *100) ;
+    sprintf ( buff , "%s : %s" , k -> key , k -> value ) ;
+    return buff ;
 }
 //Créer un kvp depuis une string de la forme ”clé :valeur”
 kvp* stkv(char* str){
-    char* cpy=(char*)malloc(strlen(str)*sizeof(char));
-    strcpy(cpy,str);
-    char* ptr=strtok(cpy," :");
-    char* k=strdup(ptr);
-    ptr=strtok(NULL," :");
-    char* v=strdup(ptr);
+    char k [100] , v [100];
+    sscanf ( str , "%s : %s",k,v);
     return createKeyVal(k, v); // Appel à la fonction createKeyVal avec les chaînes k et v en paramètres
 }
 
@@ -48,7 +37,7 @@ kvp* stkv(char* str){
 Commit* initCommit(){
     Commit* c=(Commit *)malloc(sizeof(Commit));
     c->n=0;
-    c->size=SIZE_MAX;
+    c->size=N_COMMIT;
     c->T=malloc(c->size*sizeof(kvp*));
     for(int i=0;i<c->size;i++){
         c->T[i]=NULL;
@@ -57,7 +46,7 @@ Commit* initCommit(){
 }
 
 //Fonction de hash
-unsigned long hash(unsigned char *str){
+unsigned long hash(char *str){
     unsigned long hash = 5381;
     int c;
     while ((c = *str++))
@@ -65,29 +54,13 @@ unsigned long hash(unsigned char *str){
     return hash;
 }
 //insère la paire (key, value) dans la table, en gérant les collisions par adressage ouvert et probing linéaire.
-void commitSet(Commit* c,char* key, char* value){ // A RETRAVAILLER
-    if(c==NULL){
-        printf("fnc commitSet: le commit est mal défini\n");
-        return;
+void commitSet(Commit* c,char* key, char* value){
+    int p = hash(key)%c-> size ;  //JE COMPRENDS PAS CA VIENT DU PDF
+    while (c->T[p]!= NULL ) {
+        p = (p+1)%c-> size ; //probing lineaire
     }
-    unsigned char *ukey=(unsigned char*)key;
-    unsigned long hash_valeur=hash(ukey)%SIZE_MAX;
-    //Si la case du commit est vide
-    if(c->T[hash_valeur]==NULL){
-        kvp* k=createKeyVal(key,value);
-        c->T[hash_valeur]=k;
-        c->n++;
-    }
-    //SI la case du commit est déjà allouée
-    int i=0;
-    while(c->T[hash_valeur]!=NULL && i<c->size){ 
-        if(strcmp(c->T[hash_valeur]->key,key)==0){ //Si la clé existe déjà on la met à jour avec +i
-            c->T[hash_valeur]->value=value;
-            return; //On a finit
-        }
-        i++;
-        hash_valeur=(hash_valeur+i)%SIZE_MAX;
-    }    
+    c->T[p] = createKeyVal(key,value);
+    c->n ++;   
 }
 
 //alloue et initialise un Commit, puis ajoute l’élément obligatoire correspondant à la clé "tree"
@@ -102,16 +75,15 @@ char* commitGet(Commit* c, char* key){
         printf("fnc commitGet: le commit est mal défini\n");
         return NULL;
     }
-    unsigned char *ukey=(unsigned char*)key;
-    unsigned long hash_valeur=hash(ukey)%SIZE_MAX;
+    int p = hash( key )%c-> size ;
     int i=0;
-    while(c->T[hash_valeur]!=NULL && i<c->size){
-        if(strcmp(c->T[hash_valeur]->key,key)==0){
-            return c->T[hash_valeur]->value; // on a trouvé
+    while(c->T[p]!=NULL && i<c->size){
+        if(strcmp(c->T[p]->key,key)==0){
+            return c->T[p]->value; // on a trouvé
         }
+        p=(p+i)%SIZE_MAX;
         i++;
-        hash_valeur=(hash_valeur+i)%SIZE_MAX;
-    }
+        }
     return NULL;
 }
 //convertit un commit en une chaı̂ne de caractères
@@ -120,25 +92,19 @@ char* cts(Commit* c){
         printf("fnc cts: le commit est mal défini\n");
         return NULL;
     }
-    int longeur=0;
-    for(int i=0;i<c->size;i++){
-        if(c->T[i]!=NULL){
-            longeur+=strlen(kvts(c->T[i]))+1;
-        }
-    }
-
-    char*r=malloc(longeur+1*sizeof(char));
+    char*r=malloc(c->n*sizeof(char)*100);
     r[0]='\0';
+
     for(int i=0;i<c->size;i++){
         if(c->T[i]!=NULL){
-            printf("%s\n",kvts(c->T[i]));
-            snprintf(r,strlen(kvts(c->T[i]))+2,"%s\n",kvts(c->T[i]));
+            strcat (r, kvts(c->T[i]));
+            strcat (r,"\n") ;
         }
     }
     return r;
 }
 //Retourne un commit depuis une string
-Commit* stc(char* ch){
+Commit* stc(char* ch){ //Different du pdf mais semble bien fonctionner
     if(ch==NULL){
         printf("fnc stc: erreur de d'argument de string\n");
     }
@@ -167,20 +133,18 @@ void ctf(Commit* c, char* file){
     fclose(f);
 }
 
-//charger un Commit depuis un fichier le représentant
-Commit* ftc(char* file){
-    FILE* f=fopen(file,"r");
-    if(f==NULL){
-        printf("fnc ftc: erreur de lecture du fichier");
+//charge un Commit depuis un fichier le représentant
+Commit * ftc ( char * file ) {
+    char buff [ MESSAGE_SIZE ];
+    char * all = malloc ( sizeof ( char ) * MESSAGE_SIZE ) ;
+    FILE * f = fopen ( file ,"r");
+    if (f==NULL){
+        printf("ERROR: f i l e d o e s n o t e x i s t \n" ) ;
+        return NULL ;
     }
-    Commit *c=initCommit();
-    char ligne[255];
-    while(fgets(ligne,255,f)){
-        if(strlen(ligne)>1){//Si la ligne n'est pas vide
-            kvp*k=stkv(ligne);
-            commitSet(c,k->key,k->value);
-            freeKeyVal(k);
-        }
+    while(fgets(buff,N,f)!= NULL){
+        strcat ( all , buff ) ;
     }
-    return c;
+    Commit * c = stc (all) ;
+    return c ;
 }
