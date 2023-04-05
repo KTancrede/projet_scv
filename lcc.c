@@ -4,6 +4,7 @@
 #include "lcc.h"
 //Initialise la liste
 List* initList(){
+    /*
     List* liste=(List*)malloc(sizeof(List));
     if(liste!=NULL){
         *liste=(Cell*)malloc(sizeof(Cell));
@@ -12,16 +13,18 @@ List* initList(){
             (*liste)->next=NULL;
         }
     }
-    return liste;
+    return liste;*/ 
+    //Correction 
+    List * L = malloc(sizeof(List));
+    * L = NULL ;
+    return L ;
 }
 
 //Créer une cellule
 Cell* buildCell(char* ch){
     Cell* c=(Cell*)malloc(sizeof(Cell));
-    if(c!=NULL){
-        c->data=strdup(ch);
-        c->next=NULL;
-    }
+    c->data=strdup(ch);
+    c->next=NULL;
     return c;
 }
 
@@ -43,7 +46,6 @@ void insertFirst(List *L, Cell* C){
 
 //retourne la chaı̂ne de caractères qu'une cellule représente
 char* ctos(Cell* c){
-
     if(c==NULL){
         printf("fnc ctos: La cellule donnée n'existe pas\n");
         return NULL;
@@ -54,10 +56,10 @@ char* ctos(Cell* c){
     return c->data;
 }
 //retourne la chaı̂ne de caractères qu'une liste représente
-char* ltos(List* L){
-    if(L==NULL){
+char* ltos(List* L){ //Differente du corrigée
+    if(*L==NULL){
         printf("fnc ltos: La liste n'est pas définie\n");
-        return NULL;
+        return "";
     }
     char * r=(char*)malloc(1024*sizeof(char));
     r[0]='\0'; 
@@ -72,7 +74,7 @@ char* ltos(List* L){
 
 //Cherche l'élément i d'une liste
 Cell* listGet(List* L, int i){
-    if(L==NULL){
+    if(*L==NULL){
         printf("fnc listGet: La liste n'est pas définie\n");
         return NULL;
     }
@@ -90,7 +92,7 @@ Cell* listGet(List* L, int i){
 
 //recherche un élément dans une liste à partir de son contenu et renvoie une référence vers lui ou NULL s’il n’est pas dans la liste
 Cell* searchList(List* L, char* str) {
-    if (L == NULL) {
+    if (*L == NULL) {
         printf("fnc searchList: La liste n'est pas définie\n");
         return NULL;
     }
@@ -105,19 +107,28 @@ Cell* searchList(List* L, char* str) {
 }
 
 //permet de transformer une chaı̂ne de caractères représentant une liste en une liste chaı̂née
-List* stol(char* s){
-    if(s==NULL){
-        printf("fnc stol: la chaine s n'est pas bien définie\n");
-        return NULL;
+List * stol ( char * s ) {
+    int pos = 0;
+    int n_pos = 0;
+    int size = strlen ( s ) ;
+    int sep = '|';
+    char * ptr ;
+    char * result = malloc ( sizeof ( char ) *1000) ;
+    int end = 0;
+    List * L = initList () ;
+    while ( pos < strlen ( s ) ) {
+        ptr = strchr ( s + pos , sep ) ;
+        if ( ptr == NULL )
+            n_pos = strlen ( s ) +1;
+        else {
+            n_pos = ptr - s + 1;
+        }
+        memcpy ( result , s + pos , n_pos - pos - 1) ;
+        result [ n_pos - pos - 1] = '\0 ' ;
+        pos = n_pos ;
+        insertFirst (L , buildCell ( result ) ) ;
     }
-    List* l=initList();
-    int i=0;
-    while(s[i]!='\0'){
-        i++;
-        Cell* c=buildCell(&s[i]);
-        insertFirst(l,c);
-    }
-    return l;
+    return L ;
 }
 //permet d’écrire une liste dans un fichier
 void ltof(List* L, char* path){
@@ -130,11 +141,7 @@ void ltof(List* L, char* path){
         printf("fnc ltof :Le fichier ne s'est pas ouvert correctement\n");  
         return;
     }
-    Cell* c = *L;
-    while(c!=NULL){
-    fprintf(f, "%s\n", c->data);
-        c=c->next;
-    }
+    fputs(ltos(L),f);
     fclose(f);
 }
 //permet de lire une liste enregistrée dans un fichier
@@ -143,18 +150,12 @@ List* ftol(char* path){
         printf("fnc ftol: problème de path\n");
         return NULL;
     }
-
+    char buff [ N * MAX_FILES ];
     FILE *f=fopen(path,"r");
     if(f==NULL){
         printf("fnc ftol :Le fichier ne s'est pas ouvert correctement\n");  
         return NULL;
     }
-    List *L=initList();
-
-    char c=fgetc(f);
-    while(c!=EOF){
-        insertFirst(L,buildCell(&c));
-    }
-    fclose(f);
-    return L;
+    fgets ( buff , N * MAX_FILES , f ) ;
+    return stol ( buff ) ;
 }

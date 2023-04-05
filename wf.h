@@ -27,3 +27,6 @@ char* saveWorkTree(WorkTree* wt, char* path);
 char* blobWorkTree(WorkTree* wt);
 int isFile(const char* path);
 int isDir(const char* path);
+char * concat_paths ( char * path1 , char * path2 );
+int isWorkTree ( char * hash );
+void restoreWorkTree ( WorkTree * wt , char * path );

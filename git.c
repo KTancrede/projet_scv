@@ -6,17 +6,30 @@
 #include "lcc.h"
 
 //prend en paramètre une adresse et renvoie une liste contenant le noms des fichiers et répertoires qui s’y trouvent
-List* listdir(char* root_dir){
-    List* l=initList();
-    DIR* dp= opendir(root_dir);
+List * listdir ( char * root_dir ) {
+    DIR * dp ;
     struct dirent * ep ;
-    if(dp!=NULL){
-        while ((ep=readdir(dp))!=NULL){
-            //buildCell(ep->d_name);
-            insertFirst(l,buildCell(ep->d_name));
+    List * L = initList () ;
+    * L = NULL ;
+    Cell * temp_cell ;
+    dp = opendir ( root_dir ) ;
+    if ( dp != NULL ){
+        while (( ep = readdir ( dp ) ) != NULL ){
+            temp_cell = buildCell ( ep -> d_name ) ;
+            insertFirst (L , temp_cell ) ;
+            List ptr = * L ;
+                while ( ptr != NULL ) {
+                    ptr = ptr -> next ;
+                }
         }
+        (void)closedir ( dp ) ;
     }
-    return l;
+    else
+    {
+        perror( "Couldn ’ t open t h e d i r e c t o r y " ) ;
+        return NULL ;
+    }
+    return L;
 }
 
 //retourne 1 si le fichier existe dans le répertoire courant et 0 sinon 
@@ -58,18 +71,17 @@ void cp(char *to, char *from){
 }
 
 //retourne le chemin d’un fichier à partir de son hash 
-char* hashToPath(char* hash){
-    char* path = (char*)malloc((strlen(hash)+4)*sizeof(char));
-    if(path==NULL){
-        printf("fnc  hashToPath: erreur de l'alocaiton memoire");
-        return NULL; 
+char * hashToPath ( char * hash ) {
+    char * dir = malloc (( strlen ( hash ) +1) * sizeof ( char ) ) ;
+    dir [0] = hash [0];
+    dir [1] = hash [1];
+    dir [2] = '/' ;
+    int i;
+    for ( i = 3; i <= strlen ( hash ) ; i ++) {
+        dir [i] = hash [i -1];
     }
-    strncpy(path, hash, 2);
-    path[2] = '\0'; 
-    strcat(path, "/");
-    strcat(path, hash + 2);
-    path[strlen(hash)+1]='\0';
-    return path;
+    dir [i]= '\0' ;
+    return dir ;
 }
 
 
@@ -79,25 +91,14 @@ char* hashToPath(char* hash){
 //enregistre un instantané du fichier donné en entrée
 void blobFile(char* file) {
     // Calcule le hash du fichier donné en entrée
-    char hash[1024];
-    hash[0]='\0';
-    strcat(hash, sha256file(file));
-    
-    // Construit le chemin du répertoire où stocker le fichier
-    char chemin[1024];
-    chemin[0]='\0';
-    strcat(chemin, hashToPath(hash));
-    
-    // Crée le répertoire s'il n'existe pas déjà
-    char commande[1024];
-    snprintf(commande, 1024 + 10, "mkdir -p %s", chemin);
-    system(commande);
-    
-    // Copie le fichier dans le répertoire
-    char dest[1024];
-    dest[0] = '\0';
-    strcat(dest, chemin);
-    strcat(dest, "/");
-    strcat(dest, file);
-    cp(dest, file);
+    char* hash=sha256file(file);
+    char * ch2 = strdup ( hash ) ;
+    ch2 [2] = '\0' ;
+    if (! file_exists ( ch2 ) ) {
+    char buff [100];
+    sprintf ( buff , " mkdir %s " , ch2 ) ;
+    system ( buff ) ;
+    }
+    char * ch = hashToPath ( hash ) ;
+    cp ( ch , file ) ;
 }

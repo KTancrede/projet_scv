@@ -1,3 +1,5 @@
+#define MAX_FILES 200
+#define N 200
 typedef struct cell {
     char* data;
     struct cell* next;

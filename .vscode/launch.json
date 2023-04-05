@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/tanc/Bureau/S4/Structures_de_données/PROJET/projet_scv/projet_scv-3",
-      "program": "/home/tanc/Bureau/S4/Structures_de_données/PROJET/projet_scv/projet_scv-3/main",
+      "cwd": "/home/tanc/Bureau/projet_scv/projet_scv-1",
+      "program": "/home/tanc/Bureau/projet_scv/projet_scv-1/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
