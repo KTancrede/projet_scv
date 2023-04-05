@@ -1,13 +1,13 @@
 CC=gcc
-CFLAGS=-g -c -Wall 
+CFLAGS=-g -c -Wall
 
-all: main
+all: myGit
 
-main: main.o hash.o lcc.o git.o  wf.o commit.o
-	$(CC) main.o hash.o lcc.o git.o wf.o commit.o -o main
+myGit: myGit.o hash.o lcc.o git.o  wf.o commit.o gestCommit.o
+	$(CC) myGit.o hash.o lcc.o git.o wf.o commit.o gestCommit.o -o myGit
 
-main.o: main.c 
-	$(CC) $(CFLAGS) main.c
+myGit.o: myGit.c
+	$(CC) $(CFLAGS) myGit.c
 
 hash.o: hash.c hash.h #TME1 EXO1: Prise en main du langage Bash
 	$(CC) $(CFLAGS) hash.c
@@ -23,5 +23,8 @@ wf.o: wf.c wf.h	#TME2 EXO4: Fonctions de manipulation de base
 
 commit.o: commit.c commit.h #TME3 Gestion des commits
 	$(CC) $(CFLAGS) commit.c
+
+gestCommit.o: gestCommit.c gestCommit.h #TME3 Gestion des commits
+	$(CC) $(CFLAGS) gestCommit.c
 clean:
 	rm -rf *o main

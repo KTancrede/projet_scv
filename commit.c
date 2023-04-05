@@ -148,3 +148,18 @@ Commit * ftc ( char * file ) {
     Commit * c = stc (all) ;
     return c ;
 }
+
+char * blobCommit ( Commit * c ) {
+    char fname [100] = "/tmp/myfileXXXXXX" ;
+    int fd = mkstemp(fname);
+    if (fd == -1) {
+        perror("mkstemp");
+        exit(EXIT_FAILURE);
+    }
+    ctf (c , fname ) ;
+    char * hash = sha256file ( fname ) ;
+    char * ch =hashToFile(hash);
+    strcat ( ch , ".c" ) ;
+    cp(ch,fname);
+    return hash;
+}

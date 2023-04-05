@@ -24,3 +24,4 @@ char* cts(Commit* c);
 Commit* stc(char* ch);
 void ctf(Commit* c, char* file);//a
 Commit* ftc(char* file);
+char * blobCommit ( Commit * c );
