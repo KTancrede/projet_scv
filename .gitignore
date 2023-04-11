@@ -1,8 +1,7 @@
-# Object files
-*.o
-
-# Unignore all with extensions
-!*.*
+# exclure les fichiers .o et les fichiers sans extension, sauf le Makefile
+*.[o]
+*.*
+!Makefile
 
 #les .qqlc liés au programme
 *.add
