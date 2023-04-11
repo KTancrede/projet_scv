@@ -78,7 +78,7 @@ void myGitAdd(char* file_or_folder){
         printf ( "file or folder %s does not exist \n" , file_or_folder ) ;
     }
 }
-
+//Simulation de la commande git commit
 void myGitCommit(char* branch_name, char* message){
     if (!file_exists(".refs" ) ) {
         printf ( "Il faut d'abord initaliser le refs du projet");

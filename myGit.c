@@ -74,6 +74,8 @@ int main(int argc, char * argv[]) {
             WorkTree * wt = ftwt(".add");
             printf("%s\n", wtts(wt));
         }
+        else
+            printf("Il n'y a aucun fichier dans la zone de préparation\n");
         return 7;
     }
     if (strcmp(argv[1], "commit") == 0) {

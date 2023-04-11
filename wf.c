@@ -65,10 +65,6 @@ int inWorkTree(WorkTree* wt, char* name){
 }
 //ajoute un fichier ou répertoire au WorkTree (s’il n’existe pas déjà)
 int appendWorkTree(WorkTree* wt, char* name, char* hash, int mode){
-    if(wt==NULL){
-        printf("fnc appendWorkTree: Le WorkTree est mal défini");
-        return -1;
-    }
     if(inWorkTree(wt,name)!=-1){
         printf("fnc appendWorkTree: Le fichier  %s est déjà présent dans le WT\n",name);
         return 0;
@@ -83,7 +79,7 @@ int appendWorkTree(WorkTree* wt, char* name, char* hash, int mode){
         if ( hash!= NULL )
             wt -> tab [ wt -> n ++]. hash = strdup ( hash ) ;
         else
-        wt -> tab [ wt -> n ++]. hash = NULL ;
+            wt -> tab [ wt -> n ++]. hash = NULL ;
         return 0;
     }
     return 0;
