@@ -38,19 +38,6 @@ int file_exists ( char * file ){
     struct stat buffer;
     return (int)( stat ( file , &buffer ) == 0) ;
 }
-/*
-int file_exists(char *file){
-    List* dir_list = listdir(".");
-    if (dir_list == NULL) {
-        printf("Erreur lors de la récupération de la liste de fichiers\n");
-        return 0;
-    }
-    if (searchList(dir_list, file) == NULL) {
-        return 0;
-    }
-    return 1;
-}*/
-
 
 
 //copie le contenu d’un fichier vers un autre, en faisant une lecture ligne par ligne du fichier source
