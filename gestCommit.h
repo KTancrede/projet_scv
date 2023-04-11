@@ -17,3 +17,4 @@ void restoreCommit(char* hash_commit);
 void myGitCheckoutBranch(char* branch);
 List* filterList(List* L, char* pattern);
 void myGitCheckoutCommit(char* pattern);
+void printBranch(char* branch);

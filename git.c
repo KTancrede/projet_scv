@@ -4,6 +4,7 @@
 #include "dirent.h"
 #include "hash.h"
 #include "lcc.h"
+#include <sys/stat.h>
 
 //prend en paramètre une adresse et renvoie une liste contenant le noms des fichiers et répertoires qui s’y trouvent
 List * listdir ( char * root_dir ) {
@@ -33,6 +34,11 @@ List * listdir ( char * root_dir ) {
 }
 
 //retourne 1 si le fichier existe dans le répertoire courant et 0 sinon 
+int file_exists ( char * file ){
+    struct stat buffer;
+    return (int)( stat ( file , &buffer ) == 0) ;
+}
+/*
 int file_exists(char *file){
     List* dir_list = listdir(".");
     if (dir_list == NULL) {
@@ -43,7 +49,10 @@ int file_exists(char *file){
         return 0;
     }
     return 1;
-}
+}*/
+
+
+
 //copie le contenu d’un fichier vers un autre, en faisant une lecture ligne par ligne du fichier source
 void cp(char *to, char *from){
     if(file_exists(from)==1){
