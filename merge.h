@@ -1,0 +1,1 @@
+WorkTree* mergeWorkTrees(WorkTree* wt1, WorkTree* wt2, List** conflicts);
