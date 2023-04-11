@@ -30,12 +30,12 @@ Cell* buildCell(char* ch){
 
 //Insere une cellule à la tête d'une liste
 void insertFirst(List *L, Cell* C){
-    if(L==NULL){
+    if(*L==NULL){
         printf("fnc insertFirst: La liste donnée en paramètre n'est pas définie\n");
         return;
     }
     else if(C==NULL){
-        printf("fnc insertFirst: La cellule a insérer n'est pas définie correctement\n");
+        printf("fnc insertFirst: La cellule à insérer n'est pas définie correctement\n");
         return;
     }
     else{
@@ -96,14 +96,11 @@ Cell* searchList(List* L, char* str) {
         printf("fnc searchList: La liste n'est pas définie\n");
         return NULL;
     }
-    Cell* c = *L;
-    while (c->data != NULL) {
-        if (strcmp(str,c->data) == 0) {
-            return c;
-        }
-        c = c->next;
+    List ptr = *L;
+    while (ptr->data != NULL && strcmp(str,ptr->data)!=0) {
+        ptr = ptr->next;
     }
-    return NULL; // retourne NULL si l'élément n'est pas trouvé
+    return ptr; // retourne NULL si l'élément n'est pas trouvé
 }
 
 //permet de transformer une chaı̂ne de caractères représentant une liste en une liste chaı̂née
