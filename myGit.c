@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
 
     if (argc < 2) {
         printf("Erreur : pas assez d'argument\n");
-        printf("On rappelle:\n");
+        printf("Les commandes sont les suivantes:\n");
         printf("./myGit init : initialise le répertoire de références et de la branche courrante\n");
         printf("./myGit list-refs : affiche toutes les références existantes\n");
         printf("./myGit create-ref <name> <hash> : crée la référence <name> qui pointe vers le commit correspondant au hash donné\n");
@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
         system("rm .add");
         return 6;
     }
-    if (strcmp(argv[2], "add-list") == 0) {
+    if (strcmp(argv[2], "list-add") == 0) {
         printf("Zone de préparation :\n");
         if (file_exists(".add")) {
             WorkTree * wt = ftwt(".add");
