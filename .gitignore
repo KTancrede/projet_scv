@@ -4,4 +4,9 @@
 # Unignore all with extensions
 !*.*
 
+#les .qqlc liés au programme
+*.add
+*.current_branch
+*.refs
+*.pdf
 
