@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-    if (strcmp(argv[1], "refs-list") == 0) {
+    if (strcmp(argv[1], "list-refs") == 0) {
         printf("REFS:\n");
         if (file_exists(".refs")) {
             List * L = listdir(".refs");
