@@ -10,7 +10,7 @@ int branchExists(char* branch);
 void createBranch(char* branch);
 char* getCurrentBranch();
 char * hashToPathCommit(char * hash);
-int listSize(List l);
+int listSize(List* l);
 List* branchList(char* branch);
 List* getAllCommits();
 void restoreCommit(char* hash_commit);

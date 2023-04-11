@@ -11,7 +11,7 @@
 
 //Crée le répertoire caché .refs (s’il n’existe pas déjà), puis crée les fichiers master et HEAD (vides)
 void initRefs () {
-    if (! file_exists (".refs")){
+    if (!file_exists(".refs")){
         system ( "mkdir .refs" ) ;
         system ( "touch .refs/master");
         system ( "touch .refs/HEAD");
@@ -184,7 +184,7 @@ List *getAllCommits (){
         Cell * cell = * list ;
         while ( cell != NULL ) {
             if (searchList(L,cell -> data ) == NULL ) {
-                insertFirst (&L,buildCell(cell->data));
+                insertFirst (L,buildCell(cell->data));
             }
         cell = cell -> next ;
         }
@@ -225,9 +225,9 @@ List* filterList(List* L, char* pattern){
 }
 
 //Compte le nombre d'élément dans la liste
-int listSize(List l) {
+int listSize(List *l) {
     int count = 0;
-    Cell* current = l;
+    Cell* current = *l;
     while (current != NULL) {
         count++;
         current = current->next;

@@ -26,7 +26,7 @@ List * listdir ( char * root_dir ) {
     }
     else
     {
-        perror( "Couldn ’ t open t h e d i r e c t o r y " ) ;
+        perror( "Couldn ’ t open the directory" ) ;
         return NULL ;
     }
     return L;
