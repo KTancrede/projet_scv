@@ -8,4 +8,5 @@
 *.current_branch
 *.refs
 *.pdf
-
+/.vscode/
+/.refs/
