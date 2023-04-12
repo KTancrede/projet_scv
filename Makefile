@@ -27,4 +27,7 @@ commit.o: commit.c commit.h #TME3 Gestion des commits
 gestCommit.o: gestCommit.c gestCommit.h #TME3 Gestion des commits
 	$(CC) $(CFLAGS) gestCommit.c
 clean:
-	rm -rf *o main
+	rm -rf *o
+
+clean-all: #Permet de clean les dossiers créer par nos opérations
+	rm -rf *o myGit ?? .refs .current_branch
