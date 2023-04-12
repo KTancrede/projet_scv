@@ -10,6 +10,6 @@
 * `./myGit commit <branch name> [-m <message>]` : effectue un commit sur une branche, avec   ou sans message descriptif **FONCTIONNNE** 
 * `./myGit get-current-branch` : affiche le nom de la branche courante **FONCTIONNNE** 
 * `./myGit branch <branch-name>` : crée une branche qui s’appelle `<branch-name>` si elle   n’existe pas déjà **FONCTIONNNE**  
-* `./myGit branch-print <branch-name>` : affiche le hash de tous les commits de la branche,   accompagné de leur message descriptif éventuel  
+* `./myGit branch-print <branch-name>` : affiche le hash de tous les commits de la branche,   accompagné de leur message descriptif éventuel   **FONCTIONNNE mais n'affiche pas les messages**  
 * `./myGit checkout-branch <branch-name>` : réalise un déplacement sur la branche   `<branch-name>`  
 * `./myGit checkout-commit <pattern>` : réalise un déplacement sur le commit qui commence par   `<pattern>`  
