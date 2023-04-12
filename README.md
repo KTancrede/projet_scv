@@ -1,6 +1,6 @@
 # PROJET Structures de données
 
-* `./myGit init `: initialise le répertoire de références et de la branche courrante  **FONCTIONNNE**
+* `./myGit init `: initialise le répertoire de références et de la branche courrante **FONCTIONNNE**
 * `./myGit list-refs` : affiche toutes les références existantes **FONCTIONNNE**  
 * `./myGit create-ref <name> <hash>` : crée la référence `<name>` qui pointe vers le commit correspondant au `<hash>` donné  
 * `./myGit delete-ref <name>` : supprime la référence name  
