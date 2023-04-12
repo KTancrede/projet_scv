@@ -2,8 +2,8 @@
 
 * `./myGit init `: initialise le répertoire de références et de la branche courrante **FONCTIONNNE**
 * `./myGit list-refs` : affiche toutes les références existantes **FONCTIONNNE**  
-* `./myGit create-ref <name> <hash>` : crée la référence `<name>` qui pointe vers le commit correspondant au `<hash>` donné  
-* `./myGit delete-ref <name>` : supprime la référence name  
+* `./myGit create-ref <name> <hash>` : crée la référence `<name>` qui pointe vers le commit correspondant au `<hash>` donné  **FONCTIONNNE** 
+* `./myGit delete-ref <name>` : supprime la référence name **FONCTIONNNE**  
 * `./myGit add <elem> [<elem2> ...]` : ajoute un ou plusieurs fichiers/répertoires à la zone de préparation (prochain commit)  **FONCTIONNNE**
 * `./myGit clear-add` : vide la zone de préparation  **FONCTIONNNE**
 * `./myGit list-add` : affiche le contenu de la zone de préparation  **FONCTIONNNE**
