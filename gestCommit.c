@@ -48,11 +48,11 @@ char* getRef(char* ref_name){
     }
     fp = fopen( buff ,"r" ) ;
     if ( fp == NULL ) {
-        printf ( "Error opening file \n") ;
+        printf ( "fnc getRef: Error opening file \n") ;
         return NULL ;
     }
-    fgets ( result , 256 , fp ) ;
-    fclose ( fp ) ;
+    fgets (result,256,fp) ;
+    fclose (fp) ;
     return result ;
 }
 //Permet de créer un fichier
@@ -121,13 +121,17 @@ void initBranch(){
     fclose(f);
 }
 //vérifie l’existence d’une branche
-int branchExists(char*branch){
+int branchExists(char *branch){
     List * refs = listdir(".refs");
-    return searchList (refs,branch )!= NULL ;
+    return searchList(refs,branch )!= NULL ;
 }
 //crée une référence appelée branch, qui pointe vers le même commit que la référence HEAD
 void createBranch(char* branch){
     char * hash = getRef("HEAD");
+     if (hash == NULL) {
+        printf("Error getting hash from HEAD reference");
+        //return;
+    }
     createUpdateRef(branch,hash);
 }
 
@@ -138,15 +142,21 @@ char* getCurrentBranch(){
     fscanf (f, "%s",buff);
     return buff;
 }
-
-char * hashToPathCommit(char * hash ){
-    char * buff = malloc (sizeof(char)*100) ;
-    sprintf (buff , "%s.c", hashToPath ( hash ));
-    return buff ;
+char *hashToPathCommit(char *hash) {
+    char *buff = malloc(sizeof(char) * 150);
+    char *path = hashToPath(hash);
+    path[strcspn(path, "\n")] = '\0'; // supprimer le caractère de saut de ligne à la fin de la chaîne
+    sprintf(buff, "%s.c", path);
+    free(path);
+    return buff;
 }
 
+
+//parcourt la branche appelee branch, et pour chacun de ses commits, affiche son hash et son message descriptif
 void printBranch(char* branch){
-    char * commit_hash = getRef (branch);
+    char * commit_hash = getRef(branch);
+    //printf("commit_hash: %s\n",commit_hash);
+    //printf("hashToPathCommit(commit_hash): %s\n",hashToPathCommit(commit_hash));
     Commit * c = ftc(hashToPathCommit(commit_hash));
     while (c !=NULL){
         if(commitGet(c,"message") != NULL )

@@ -97,9 +97,9 @@ int main(int argc, char * argv[]) {
         return 9;
     }
     if (strcmp(argv[1], "branch") == 0) {
-        if (!branchExists(argv[2]))
+        if (!branchExists(argv[2])){
             createBranch(argv[2]);
-        else
+        }else
             printf("The branch already exist");
         return 10;
     }

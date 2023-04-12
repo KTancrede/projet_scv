@@ -57,7 +57,7 @@ char* ctos(Cell* c){
 }
 //retourne la chaı̂ne de caractères qu'une liste représente
 char* ltos(List* L){ //Differente du corrigée
-    if(*L==NULL){
+    if(L==NULL){
         printf("fnc ltos: La liste n'est pas définie\n");
         return "";
     }
@@ -74,7 +74,7 @@ char* ltos(List* L){ //Differente du corrigée
 
 //Cherche l'élément i d'une liste
 Cell* listGet(List* L, int i){
-    if(*L==NULL){
+    if(L==NULL){
         printf("fnc listGet: La liste n'est pas définie\n");
         return NULL;
     }
@@ -92,12 +92,8 @@ Cell* listGet(List* L, int i){
 
 //recherche un élément dans une liste à partir de son contenu et renvoie une référence vers lui ou NULL s’il n’est pas dans la liste
 Cell* searchList(List* L, char* str) {
-    if (*L == NULL) {
-        printf("fnc searchList: La liste n'est pas définie\n");
-        return NULL;
-    }
     List ptr = *L;
-    while (ptr->data != NULL && strcmp(str,ptr->data)!=0) {
+    while (ptr != NULL && strcmp(str,ptr->data)!=0) {
         ptr = ptr->next;
     }
     return ptr; // retourne NULL si l'élément n'est pas trouvé

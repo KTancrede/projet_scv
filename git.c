@@ -76,7 +76,7 @@ char * hashToPath ( char * hash ) {
     for ( i = 3; i <= strlen ( hash ) ; i ++) {
         dir [i] = hash [i -1];
     }
-    dir [i]= '\0' ;
+    dir[i]= '\0' ;
     return dir ;
 }
 

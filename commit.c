@@ -60,7 +60,7 @@ void commitSet(Commit* c,char* key, char* value){
         p = (p+1)%c-> size ; //probing lineaire
     }
     c->T[p] = createKeyVal(key,value);
-    c->n ++;   
+    c->n ++;
 }
 
 //alloue et initialise un Commit, puis ajoute l’élément obligatoire correspondant à la clé "tree"
@@ -139,7 +139,7 @@ Commit * ftc ( char * file ) {
     char * all = malloc ( sizeof ( char ) * MESSAGE_SIZE ) ;
     FILE * f = fopen ( file ,"r");
     if (f==NULL){
-        printf("ERROR: f i l e d o e s n o t e x i s t \n" ) ;
+        printf("fnc ftc : file does not exist\n" ) ;
         return NULL ;
     }
     while(fgets(buff,N,f)!= NULL){
