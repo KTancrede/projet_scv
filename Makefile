@@ -30,4 +30,4 @@ clean:
 	rm -rf *o
 
 clean-all: #Permet de clean les dossiers créer par nos opérations
-	rm -rf *o myGit ?? .refs .current_branch
+	rm -rf *o myGit ?? .refs .current_branch .add

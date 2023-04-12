@@ -75,7 +75,7 @@ char* commitGet(Commit* c, char* key){
         printf("fnc commitGet: le commit est mal défini\n");
         return NULL;
     }
-    int p = hash( key )%c-> size ;
+    int p = hash(key)%c-> size ;
     int i=0;
     while(c->T[p]!=NULL && i<c->size){
         if(strcmp(c->T[p]->key,key)==0){
