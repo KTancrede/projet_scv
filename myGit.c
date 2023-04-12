@@ -8,6 +8,7 @@
 #include "wf.h"
 #include "commit.h"
 #include "gestCommit.h"
+#include "merge.h"
 
 int main(int argc, char * argv[]) {
 
@@ -27,6 +28,7 @@ int main(int argc, char * argv[]) {
         printf("./myGit branch-print <branch-name> : affiche le hash de tous les commits de la branche, accompagné de leur message descriptif éventuel\n");
         printf("./myGit checkout-branch <branch-name> : réalise un déplacement sur la branche <branch-name>\n");
         printf("./myGit checkout-commit <pattern> : réalise un déplacement sur le commit qui commence par <pattern>\n");
+        printf("./myGit merge <branch> <message>: \n");
         return 0;
     }
     //printf("%s",argv[0]);
@@ -121,5 +123,15 @@ int main(int argc, char * argv[]) {
         myGitCheckoutCommit(argv[2]);
         return 13;
     }
+
+    if (strcmp(argv[1], "merge") == 0) {
+        if (argc > 3) {
+
+        }else {
+
+        }
+        return 14;
+    }
+
     return -1;
 }

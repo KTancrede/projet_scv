@@ -9,8 +9,13 @@
 #include "git.h"
 
 //Cree une liste des noms de fichiers qui sont en conflits et un Worktree compose des fichiers qui ne sont pas en conflits
+//wt1 et wt2 sont les deux WorkTrees a comparer et conflicts est la liste des noms de fichiers en conflits
 //PAS FINI!!!
-WorkTree* mergeWorkTrees(WorkTree* wt1, WorkTree* wt2, List** conflicts){ 
+WorkTree* mergeWorkTrees(WorkTree* wt1, WorkTree* wt2, List** conflicts){
+    if(wt1 == NULL || wt2 == NULL){
+        printf("mergeWorkTrees: Au moins un des WorkTrees est mal défini\n");
+        return NULL;
+    }
     if(conflicts == NULL){
         conflicts = initList();
     }
@@ -31,4 +36,16 @@ WorkTree* mergeWorkTrees(WorkTree* wt1, WorkTree* wt2, List** conflicts){
             }
         }
     }
+    return wt3;
+}
+
+//fusionne la branche courante avec la branche pass ́ee en parametre si aucun conflit n’existe.
+List* merge(char* remote_branch, char* message){
+
+
+}
+
+//cree et ajoute un commit de suppression sur la branche branch, correspondant a la suppression des elements de la liste conflicts
+void createDeletionCommit(char* branch, List* conflicts, char* message){
+
 }
