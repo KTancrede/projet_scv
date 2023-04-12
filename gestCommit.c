@@ -32,7 +32,7 @@ void deleteRef(char *ref_name ) {
     if (! file_exists ( buff ) ) {
         printf ( "fnc deleteRef: The reference %s does not exist\n", ref_name );
     } else {
-    sprintf(buff , "rm . ref/%s" , ref_name ) ;
+    sprintf(buff , "rm .refs/%s" , ref_name ) ;
     system(buff ) ;
     }
 }
@@ -41,7 +41,7 @@ char* getRef(char* ref_name){
     FILE *fp;
     char *result = malloc(sizeof(char)*256) ;
     char buff[256];
-    sprintf(buff ,". refs/%s",ref_name);
+    sprintf(buff ,".refs/%s",ref_name);
     if (!file_exists(buff)){
         printf ( "fnc getRef: The reference %s does not exist\n" , ref_name ) ;
         return NULL ;
@@ -80,7 +80,7 @@ void myGitAdd(char* file_or_folder){
 }
 //Simulation de la commande git commit
 void myGitCommit(char* branch_name, char* message){
-    printf("On rentre dans gitCommit\n");
+    //printf("On rentre dans gitCommit\n");
     if (!file_exists(".refs" ) ) {
         printf ( "Il faut d'abord initaliser le refs du projet\n");
         return;
@@ -97,7 +97,7 @@ void myGitCommit(char* branch_name, char* message){
         printf("Problème de définition des hash\n");
     }
     if (strcmp (last_hash ,head_hash)!=0) {
-        printf ("HEAD doit pointer sur le dernier commit de la branche") ;
+        printf ("HEAD doit pointer sur le dernier commit de la branche\n") ;
         return ;
     }
     WorkTree * wt = ftwt(".add");

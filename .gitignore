@@ -11,3 +11,6 @@
 /.vscode/
 /.refs/
 myGit
+
+#les fichiers qui n'ont que deux char
+??/

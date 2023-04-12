@@ -27,13 +27,13 @@ List * listdir ( char * root_dir ) {
     }
     else
     {
-        perror( "Couldn ’ t open the directory" ) ;
+        perror( "fnc listdir: Couldn ’ t open the directory" ) ;
         return NULL ;
     }
     return L;
 }
 
-//retourne 1 si le fichier existe dans le répertoire courant et 0 sinon 
+//retourne 1 si le fichier existe dans le répertoire courant et 0 sinon
 int file_exists ( char * file ){
     struct stat buffer;
     return (int)( stat ( file , &buffer ) == 0) ;
@@ -66,7 +66,7 @@ void cp(char *to, char *from){
     }
 }
 
-//retourne le chemin d’un fichier à partir de son hash 
+//retourne le chemin d’un fichier à partir de son hash
 char * hashToPath ( char * hash ) {
     char * dir = malloc (( strlen ( hash ) +1) * sizeof ( char ) ) ;
     dir [0] = hash [0];

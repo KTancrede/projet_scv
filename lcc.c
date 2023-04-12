@@ -13,8 +13,8 @@ List* initList(){
             (*liste)->next=NULL;
         }
     }
-    return liste;*/ 
-    //Correction 
+    return liste;*/
+    //Correction
     List * L = malloc(sizeof(List));
     * L = NULL ;
     return L ;
@@ -30,7 +30,7 @@ Cell* buildCell(char* ch){
 
 //Insere une cellule à la tête d'une liste
 void insertFirst(List *L, Cell* C){
-    if(*L==NULL){
+    if(L==NULL){
         printf("fnc insertFirst: La liste donnée en paramètre n'est pas définie\n");
         return;
     }
@@ -62,7 +62,7 @@ char* ltos(List* L){ //Differente du corrigée
         return "";
     }
     char * r=(char*)malloc(1024*sizeof(char));
-    r[0]='\0'; 
+    r[0]='\0';
     Cell* c = *L;
     while(c!=NULL){
         snprintf(r + strlen(r), 1024 - strlen(r), "%s|", ctos(c));
@@ -135,7 +135,7 @@ void ltof(List* L, char* path){
     }
     FILE *f=fopen(path,"w");
     if(f==NULL){
-        printf("fnc ltof :Le fichier ne s'est pas ouvert correctement\n");  
+        printf("fnc ltof :Le fichier ne s'est pas ouvert correctement\n");
         return;
     }
     fputs(ltos(L),f);
@@ -150,7 +150,7 @@ List* ftol(char* path){
     char buff [ N * MAX_FILES ];
     FILE *f=fopen(path,"r");
     if(f==NULL){
-        printf("fnc ftol :Le fichier ne s'est pas ouvert correctement\n");  
+        printf("fnc ftol :Le fichier ne s'est pas ouvert correctement\n");
         return NULL;
     }
     fgets ( buff , N * MAX_FILES , f ) ;

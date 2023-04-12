@@ -39,6 +39,7 @@ int main(int argc, char * argv[]) {
     if (strcmp(argv[1], "list-refs") == 0) {
         printf("REFS:\n");
         if (file_exists(".refs")) {
+            //printf("Le fichier existe\n");
             List * L = listdir(".refs");
             //printf("list L: %s\n",ltos(L));
             for (Cell * ptr = * L; ptr != NULL; ptr = ptr -> next) {
@@ -53,10 +54,12 @@ int main(int argc, char * argv[]) {
 
     if (strcmp(argv[1], "create-ref") == 0) {
         createUpdateRef(argv[2], argv[3]);
+        printf("La ref '%s' a bien été crée\n",argv[2]);
         return 3;
     }
     if (strcmp(argv[1], "delete-ref") == 0) {
         deleteRef(argv[2]);
+        printf("La ref '%s' a bien été supprimé\n",argv[2]);
         return 4;
     }
     if (strcmp(argv[1], "add") == 0) {
@@ -90,7 +93,7 @@ int main(int argc, char * argv[]) {
         return 8;
     }
     if (strcmp(argv[1], "get-current-branch") == 0) {
-        printf("%s", getCurrentBranch());
+        printf("%s\n", getCurrentBranch());
         return 9;
     }
     if (strcmp(argv[1], "branch") == 0) {
