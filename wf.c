@@ -27,7 +27,7 @@ char* wfts(WorkFile* wf){
 }
 //Permet de convertir une chaine de caractère en un WorkFile
 WorkFile* stwf(char* ch) {
-    //Comme on sait qu'il y a 3 éléments dans un workfile nous allons travailler avec 3 boucles 
+    //Comme on sait qu'il y a 3 éléments dans un workfile nous allons travailler avec 3 boucles
     if (ch == NULL) {
         printf("fnc stwf: La chaine de caractère est mal définie\n");
         return NULL;
@@ -74,12 +74,12 @@ int appendWorkTree(WorkTree* wt, char* name, char* hash, int mode){
         return -1;
     }
     if (wt->size > wt-> n ) {
-        wt -> tab [ wt -> n ]. mode = mode ;
-        wt -> tab [ wt -> n ]. name = strdup ( name ) ;
+        wt->tab[wt->n].mode =mode ;
+        wt->tab[wt->n].name =strdup( name ) ;
         if ( hash!= NULL )
-            wt -> tab [ wt -> n ++]. hash = strdup ( hash ) ;
+            wt->tab[wt->n++].hash = strdup ( hash ) ;
         else
-            wt -> tab [ wt -> n ++]. hash = NULL ;
+            wt->tab[wt->n++].hash = NULL ;
         return 0;
     }
     return 0;
@@ -222,7 +222,7 @@ char* saveWorkTree(WorkTree* wt, char* path){
             blobFile(absPath);
             wt->tab[i].hash = sha256file( absPath ) ;
             wt->tab[i].mode = getChmod( absPath ) ;
-        } 
+        }
         else{
             WorkTree * wt2 = initWorkTree () ;
             List * L = listdir ( absPath ) ;
@@ -235,7 +235,7 @@ char* saveWorkTree(WorkTree* wt, char* path){
                 wt -> tab[i].mode = getChmod ( absPath ) ;
         }
     }
-    return blobWorkTree ( wt ) ; 
+    return blobWorkTree ( wt ) ;
 }
 
 int isWorkTree ( char * hash ) {

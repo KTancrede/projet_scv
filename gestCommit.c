@@ -26,11 +26,11 @@ void createUpdateRef(char* ref_name, char* hash){
 }
 
 //Permet de supprimer une référence
-void deleteRef (char *ref_name ) {
+void deleteRef(char *ref_name ) {
     char buff [256];
     sprintf ( buff , ".refs/%s" , ref_name ) ;
     if (! file_exists ( buff ) ) {
-        printf ( "The reference %s does not exist", ref_name );
+        printf ( "fnc deleteRef: The reference %s does not exist\n", ref_name );
     } else {
     sprintf(buff , "rm . ref/%s" , ref_name ) ;
     system(buff ) ;
@@ -39,14 +39,14 @@ void deleteRef (char *ref_name ) {
 //récupère vers quoi pointe une référence (c-à-d le hash contenu dans le fichier)
 char* getRef(char* ref_name){
     FILE *fp;
-    char *result = malloc ( sizeof ( char ) *256) ;
-    char buff [256];
-    sprintf ( buff , ". refs/%s", ref_name ) ;
-    if (! file_exists ( buff ) ) {
-        printf ( "The reference %s does not exist" , ref_name ) ;
+    char *result = malloc(sizeof(char)*256) ;
+    char buff[256];
+    sprintf(buff ,". refs/%s",ref_name);
+    if (!file_exists(buff)){
+        printf ( "fnc getRef: The reference %s does not exist\n" , ref_name ) ;
         return NULL ;
     }
-    fp = fopen ( buff ,"r" ) ;
+    fp = fopen( buff ,"r" ) ;
     if ( fp == NULL ) {
         printf ( "Error opening file \n") ;
         return NULL ;
@@ -80,19 +80,23 @@ void myGitAdd(char* file_or_folder){
 }
 //Simulation de la commande git commit
 void myGitCommit(char* branch_name, char* message){
+    printf("On rentre dans gitCommit\n");
     if (!file_exists(".refs" ) ) {
-        printf ( "Il faut d'abord initaliser le refs du projet");
+        printf ( "Il faut d'abord initaliser le refs du projet\n");
         return;
     }
     char buff [256];
     sprintf (buff,".refs/%s" , branch_name);
     if (!file_exists(buff)){
-        printf ("La branche n'existe pas") ;
+        printf ("La branche n'existe pas\n") ;
         return ;
     }
     char * last_hash = getRef(branch_name);
     char * head_hash = getRef("HEAD");
-    if (strcmp ( last_hash , head_hash ) !=0) {
+    if(last_hash==NULL &&head_hash==NULL){
+        printf("Problème de définition des hash\n");
+    }
+    if (strcmp (last_hash ,head_hash)!=0) {
         printf ("HEAD doit pointer sur le dernier commit de la branche") ;
         return ;
     }
@@ -129,7 +133,7 @@ void createBranch(char* branch){
 
 //lit le fichier caché .current branch pour retourner le nom de la branche courante
 char* getCurrentBranch(){
-    FILE * f = fopen ( ".current_branch","r");
+    FILE * f = fopen (".current_branch","r");
     char * buff = malloc(sizeof(char)*100);
     fscanf (f, "%s",buff);
     return buff;
@@ -146,7 +150,7 @@ void printBranch(char* branch){
     Commit * c = ftc(hashToPathCommit(commit_hash));
     while (c !=NULL){
         if(commitGet(c,"message") != NULL )
-            printf( "%s −> %s \n",commit_hash,commitGet(c,"message"));
+            printf( "%s -> %s \n",commit_hash,commitGet(c,"message"));
         else
             printf("%s \n",commit_hash);
         if (commitGet(c ,"predecessor") != NULL){
@@ -168,7 +172,7 @@ List* branchList(char* branch){
             commit_hash = commitGet (c ,"predecessor");
             c = ftc(hashToPathCommit(commit_hash));
         }else{
-           c = NULL ; 
+           c = NULL ;
         }
     }
     return L;

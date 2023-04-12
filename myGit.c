@@ -40,11 +40,12 @@ int main(int argc, char * argv[]) {
         printf("REFS:\n");
         if (file_exists(".refs")) {
             List * L = listdir(".refs");
+            //printf("list L: %s\n",ltos(L));
             for (Cell * ptr = * L; ptr != NULL; ptr = ptr -> next) {
                 if (ptr -> data[0] == '.')
                     continue;
                 char * content = getRef(ptr -> data);
-                printf("− %s \t %s \n", ptr -> data, content);
+                printf("- %s \t %s \n", ptr -> data, content);
             }
         }
         return 2;
@@ -68,7 +69,7 @@ int main(int argc, char * argv[]) {
         system("rm .add");
         return 6;
     }
-    if (strcmp(argv[2], "list-add") == 0) {
+    if (strcmp(argv[1], "list-add") == 0) {
         printf("Zone de préparation :\n");
         if (file_exists(".add")) {
             WorkTree * wt = ftwt(".add");
@@ -79,9 +80,11 @@ int main(int argc, char * argv[]) {
         return 7;
     }
     if (strcmp(argv[1], "commit") == 0) {
-        if (strcmp(argv[3], "-m") == 0) {
-            myGitCommit(argv[2], argv[4]);
-        } else {
+        if (argc >3) {
+            if (strcmp(argv[3], "-m") == 0) {
+                myGitCommit(argv[2], argv[4]);
+            }
+        }else {
             myGitCommit(argv[2], NULL);
         }
         return 8;
