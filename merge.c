@@ -145,9 +145,10 @@ void createDeletionCommit(char* branch, List* conflicts, char* message) {
     }
 
     // On ajoute les fichiers/repertoires du worktree qui ne font pas partie de la liste des conflits
-    for (Cell* ptr = wt; ptr != NULL; ptr = ptr->next) {
-        if (searchList(conflicts, ptr->data) == NULL) {
-            myGitAdd(ptr->data);
+    for (int i = 0; i < wt->n; i++) {
+        WorkFile wf = wt->tab[i];
+        if (searchList(conflicts, wf.name) == NULL) {
+            myGitAdd(wf.name);
         }
     }
 
