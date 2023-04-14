@@ -102,19 +102,24 @@ List* merge(char* remote_branch, char* message){
     //Récupération de la référence de la branche courante et de la branche à fusionner
     char* current_branch_HEAD = getRef(getCurrentBranch());
     char* remote_branch_HEAD = getRef(remote_branch);
+
     //Création du nouveau commit
     Commit* new_commit = initCommit();
     commitSet(new_commit,"predecessor", current_branch_HEAD);
     commitSet(new_commit,"merged_predecessor", remote_branch_HEAD);
     commitSet(new_commit, "message", message);
+
     //Enregistrement instantané du wt de fusion et du nv commit
     char* savedWT = blobWorkTree(wt_merge);
-    char* savedCommit = blobCommit(new_commit); 
+    char* savedCommit = blobCommit(new_commit);
+
     //Mise a jour des refs de la branche courante et HEAD pour pointer vers le nouveau commit
     createUpdateRef(current_branch_HEAD, savedCommit);
     createUpdateRef("HEAD", savedCommit);
+
     //suppression de la ref de la branche en parametre
     deleteRef(remote_branch_HEAD);
+
     //Restauration du projet correspondant au wt de fusion
     restoreCommit(savedCommit);
 
@@ -122,6 +127,33 @@ List* merge(char* remote_branch, char* message){
 }
 
 //cree et ajoute un commit de suppression sur la branche branch, correspondant a la suppression des elements de la liste conflicts
-void createDeletionCommit(char* branch, List* conflicts, char* message){
+void createDeletionCommit(char* branch, List* conflicts, char* message) {
+    char* current_branch = getCurrentBranch();
 
+    // One se deplace sur la branche en question
+    myGitCheckoutBranch(branch);
+
+    // On recupere le dernier commit de cette branche et le worktree associe
+    char* last_commit_hash = getRef(branch);
+    Commit* last_commit = ftc(hashToPathCommit(last_commit_hash));
+    char* tree_hash = commitGet(last_commit, "tree");
+    WorkTree* wt = ftwt(hashToPath(tree_hash));
+
+    // On vide la zone de preparation
+    if (file_exists(".add")) {
+        system("rm .add");
+    }
+
+    // On ajoute les fichiers/repertoires du worktree qui ne font pas partie de la liste des conflits
+    for (Cell* ptr = wt; ptr != NULL; ptr = ptr->next) {
+        if (searchList(conflicts, ptr->data) == NULL) {
+            myGitAdd(ptr->data);
+        }
+    }
+
+    // On cree le commit de supression
+    myGitCommit(branch, message);
+
+    // On revient sur la branche de depart
+    myGitCheckoutBranch(current_branch);
 }
