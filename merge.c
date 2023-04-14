@@ -110,8 +110,15 @@ List* merge(char* remote_branch, char* message){
     //Enregistrement instantané du wt de fusion et du nv commit
     char* savedWT = blobWorkTree(wt_merge);
     char* savedCommit = blobCommit(new_commit); 
-    
-    
+    //Mise a jour des refs de la branche courante et HEAD pour pointer vers le nouveau commit
+    createUpdateRef(current_branch_HEAD, savedCommit);
+    createUpdateRef("HEAD", savedCommit);
+    //suppression de la ref de la branche en parametre
+    deleteRef(remote_branch_HEAD);
+    //Restauration du projet correspondant au wt de fusion
+    restoreCommit(savedCommit);
+
+    return NULL;
 }
 
 //cree et ajoute un commit de suppression sur la branche branch, correspondant a la suppression des elements de la liste conflicts
