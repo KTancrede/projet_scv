@@ -33,7 +33,7 @@ kvp* stkv(char* str){
     return createKeyVal(k, v); // Appel à la fonction createKeyVal avec les chaînes k et v en paramètres
 }
 
-//Initialise un commint
+//Initialise un commit
 Commit* initCommit(){
     Commit* c=(Commit *)malloc(sizeof(Commit));
     c->n=0;

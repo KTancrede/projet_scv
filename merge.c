@@ -8,6 +8,7 @@
 #include "lcc.h"
 #include "git.h"
 #include "gestCommit.h"
+#include "commit.h"
 
 // Fonction pour fusionner deux WorkTrees et créer une liste de conflits
 // wt1 et wt2 sont les deux WorkTrees à comparer, conflicts est un pointeur vers une liste de noms de fichiers en conflits
@@ -102,7 +103,14 @@ List* merge(char* remote_branch, char* message){
     char* current_branch_HEAD = getRef(getCurrentBranch());
     char* remote_branch_HEAD = getRef(remote_branch);
     //Création du nouveau commit
-    char* new_commit_hash =  
+    Commit* new_commit = initCommit();
+    commitSet(new_commit,"predecessor", current_branch_HEAD);
+    commitSet(new_commit,"merged_predecessor", remote_branch_HEAD);
+    commitSet(new_commit, "message", message);
+    //Enregistrement instantané du wt de fusion et du nv commit
+    char* savedWT = blobWorkTree(wt_merge);
+    char* savedCommit = blobCommit(new_commit); 
+    
     
 }
 
