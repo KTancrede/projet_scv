@@ -180,13 +180,15 @@ int main(int argc, char * argv[]) {
                 freeList(conflictsCurrent);
                 freeList(conflictsTarget);
             } else {
-                printf("Invalid choice. Aborting merge.\n");
+                printf("Choix invalide. Fusion interrompue.\n");
             }
 
             freeList(conflicts);
         }
 
         free(currentBranch);
+
+        return 14;
     }
 
     return -1;
