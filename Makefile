@@ -3,8 +3,8 @@ CFLAGS=-g -c -Wall
 
 all: myGit
 
-myGit: myGit.o hash.o lcc.o git.o  wf.o commit.o gestCommit.o
-	$(CC) myGit.o hash.o lcc.o git.o wf.o commit.o gestCommit.o -o myGit
+myGit: myGit.o hash.o lcc.o git.o  wf.o commit.o gestCommit.o merge.o
+	$(CC) myGit.o hash.o lcc.o git.o wf.o commit.o gestCommit.o merge.o -o myGit
 
 myGit.o: myGit.c
 	$(CC) $(CFLAGS) myGit.c
@@ -26,6 +26,9 @@ commit.o: commit.c commit.h #TME3 Gestion des commits
 
 gestCommit.o: gestCommit.c gestCommit.h #TME3 Gestion des commits
 	$(CC) $(CFLAGS) gestCommit.c
+
+merge.o : merge.c merge.h
+	$(CC) $(CFLAGS) merge.c
 clean:
 	rm -rf *o
 
