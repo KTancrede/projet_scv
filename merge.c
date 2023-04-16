@@ -1,14 +1,14 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "merge.h"
-#include "wf.h"
-#include "hash.h"
-#include "unistd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "lcc.h"
+#include "hash.h"
 #include "git.h"
-#include "gestCommit.h"
 #include "commit.h"
+#include "wf.h"
+#include "gestCommit.h"
+#include "merge.h"
 
 // Fonction pour fusionner deux WorkTrees et créer une liste de conflits
 // wt1 et wt2 sont les deux WorkTrees à comparer, conflicts est un pointeur vers une liste de noms de fichiers en conflits
@@ -39,7 +39,7 @@ WorkTree* mergeWorkTrees(WorkTree* wt1, WorkTree* wt2, List** conflicts){
                 // Si les fichiers sont différents
                 if(strcmp(wt1->tab[i].hash,wt2->tab[j].hash)!=0){
                     // Ajoute le nom du fichier à la liste de conflits
-                    insertFirst(conflicts,buildCell(wt1->tab[i].name));
+                    insertFirst(*conflicts,buildCell(wt1->tab[i].name));
                 }
                 // Si les fichiers sont identiques
                 else{
@@ -94,7 +94,11 @@ List* merge(char* remote_branch, char* message){
 
     //Verification des conflits (donc qu'il n'y en a pas précisement)
     List* conflicts = initList();
-    WorkTree* wt_merge=mergeWorkTrees(getCurrentBranch(),remote_branch,&conflicts);
+
+    WorkTree* current_branch_wt = getWorkTreeFromBranch(getCurrentBranch());
+    WorkTree* remote_branch_wt = getWorkTreeFromBranch(remote_branch);
+    WorkTree* wt_merge = mergeWorkTrees(current_branch_wt, remote_branch_wt, &conflicts);
+
     if(listSize(conflicts)!=0){
         printf("fnc merge: il y a des conflits\n");
         return conflicts;

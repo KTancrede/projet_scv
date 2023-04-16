@@ -8,6 +8,8 @@
 #include "git.h"
 #include "errno.h"
 #include <sys/stat.h>
+#include "commit.h"
+#include "gestCommit.h"
 
 
 //Permet de créer un WorkFile
@@ -265,4 +267,15 @@ void restoreWorkTree ( WorkTree * wt , char * path ) {
             }
         }
     }
+}
+
+WorkTree* getWorkTreeFromBranch(char* branch) {
+
+    char* commit_hash = getRef(branch);
+    char* commit_path = hashToPath(commit_hash);
+    Commit* commit = ftc(commit_path);
+    char* worktree_hash = commitGet(commit, "tree");
+    char* worktree_path = hashToFile(worktree_hash);
+    WorkTree* worktree = ftwt(worktree_path);
+    return worktree;
 }

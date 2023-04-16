@@ -31,3 +31,4 @@ char * concat_paths ( char * path1 , char * path2 );
 int isWorkTree ( char * hash );
 void restoreWorkTree ( WorkTree * wt , char * path );
 char * hashToFile ( char * hash );
+WorkTree* getWorkTreeFromBranch(char* branch);
