@@ -152,3 +152,17 @@ List* ftol(char* path){
     fgets ( buff , N * MAX_FILES , f ) ;
     return stol ( buff ) ;
 }
+//Libere la memoire pour une liste
+void freeList(List* L) {
+    Cell* currentCell = (*L)->next;
+    Cell* temp;
+
+    while (currentCell != NULL) {
+        temp = currentCell;
+        currentCell = currentCell->next;
+        free(temp->data);
+        free(temp);
+    }
+
+    free(L);
+}

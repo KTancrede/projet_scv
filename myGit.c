@@ -125,12 +125,68 @@ int main(int argc, char * argv[]) {
     }
 
     if (strcmp(argv[1], "merge") == 0) {
-        if (argc > 3) {
-
-        }else {
-
+        if (argc != 4) {
+            printf("Usage: ./myGit merge <branch> <message>\n");
+            return 1;
         }
-        return 14;
+
+
+        char* targetBranch = argv[2];
+        char* message = argv[3];
+        char* currentBranch = getCurrentBranch();
+
+        List* conflicts = merge(targetBranch, message);
+
+        if (conflicts == NULL) {
+            printf("La fusion s'est bien passee.\n");
+        } else {
+            printf("Il y a des collisions entre les branches. Choisissez l'une des options suivantes:\n");
+            printf("1. Garder les fichiers de la branche courante et creer un commit de suppression pour la branche <branch>, avant de faire appel a la fonction merge.\n");
+            printf("2. Garder les fichiers de la branche <branch> et creer un commit de suppression pour la branche courante, avant de faire appel a la fonction merge.\n");
+            printf("3. Choisir manuellement, conflit par conflit, la branche sur laquelle vous souhaitez garder le fichier/repertoire qui est en conflit, avant de faire appel a la fonction merge.\n");
+
+            int choix;
+            scanf("%d", &choix);
+
+            if (choix == 1) {
+                createDeletionCommit(targetBranch, conflicts, message);
+                merge(targetBranch, message);
+            } else if (choix == 2) {
+                createDeletionCommit(currentBranch, conflicts, message);
+                merge(targetBranch, message);
+            } else if (choix == 3) {
+                List* conflictsCurrent = initList();
+                List* conflictsTarget = initList();
+
+                Cell* currentCell = (*conflicts)->next;
+                while (currentCell != NULL) {
+                    printf("Pour le conflit %s, entrez 1 pour garder la branche courante ou 2 pour garder la branche <branch>: ", currentCell->data);
+                    int conflictChoice;
+                    scanf("%d", &conflictChoice);
+
+                    if (conflictChoice == 1) {
+                        insertFirst(conflictsCurrent, buildCell(currentCell->data));
+                    } else if (conflictChoice == 2) {
+                        insertFirst(conflictsTarget, buildCell(currentCell->data));
+                    }
+
+                    currentCell = currentCell->next;
+                }
+
+                createDeletionCommit(currentBranch, conflictsCurrent, message);
+                createDeletionCommit(targetBranch, conflictsTarget, message);
+                merge(targetBranch, message);
+
+                freeList(conflictsCurrent);
+                freeList(conflictsTarget);
+            } else {
+                printf("Invalid choice. Aborting merge.\n");
+            }
+
+            freeList(conflicts);
+        }
+
+        free(currentBranch);
     }
 
     return -1;

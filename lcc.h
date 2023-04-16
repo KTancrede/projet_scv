@@ -17,3 +17,4 @@ Cell* searchList(List* L, char* str);
 List* stol(char* s);
 void ltof(List* L, char* path);
 List* ftol(char* path);
+void freeList(List* L);
