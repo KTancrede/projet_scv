@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
     if (strcmp(argv[1], "merge") == 0) {
         if (argc != 4) {
             printf("Usage: ./myGit merge <branch> <message>\n");
-            return 1;
+            return 0;
         }
 
 
