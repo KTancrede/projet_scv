@@ -4,17 +4,7 @@
 #include "lcc.h"
 //Initialise la liste
 List* initList(){
-    /*
-    List* liste=(List*)malloc(sizeof(List));
-    if(liste!=NULL){
-        *liste=(Cell*)malloc(sizeof(Cell));
-        if(*liste!=NULL){
-            (*liste)->data=NULL;
-            (*liste)->next=NULL;
-        }
-    }
-    return liste;*/
-    //Correction
+    
     List * L = malloc(sizeof(List));
     * L = NULL ;
     return L ;

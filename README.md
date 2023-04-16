@@ -13,3 +13,4 @@
 * `./myGit branch-print <branch-name>` : affiche le hash de tous les commits de la branche,   accompagné de leur message descriptif éventuel   **FONCTIONNNE mais n'affiche pas les messages**  
 * `./myGit checkout-branch <branch-name>` : réalise un déplacement sur la branche   `<branch-name>`  
 * `./myGit checkout-commit <pattern>` : réalise un déplacement sur le commit qui commence par   `<pattern>`  
+* `./myGit merge <branch> <message>` : fusionne la branche courante avec la branche `<branch>`, s'il y a des conflits l'utilisateur pourra choisir la maniere d'y remedier
